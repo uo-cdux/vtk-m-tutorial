@@ -1,45 +1,52 @@
+#include <vtkm/cont/ColorTable.h>
+#include <vtkm/cont/DataSet.h>
 #include <vtkm/cont/Initialize.h>
+
 #include <vtkm/io/reader/VTKDataSetReader.h>
 #include <vtkm/io/writer/VTKDataSetWriter.h>
-#include <vtkm/cont/DataSet.h>
-#include <vtkm/cont/ColorTable.h>
+
 #include <vtkm/rendering/Actor.h>
-#include <vtkm/rendering/Scene.h>
-#include <vtkm/rendering/MapperRayTracer.h>
 #include <vtkm/rendering/CanvasRayTracer.h>
+#include <vtkm/rendering/MapperRayTracer.h>
+#include <vtkm/rendering/Scene.h>
 #include <vtkm/rendering/View3D.h>
 
-int main(){
-    //Loading .vtk File
-    const char *input = "kitchen.vtk";
-    vtkm::io::reader::VTKDataSetReader reader(input);
-    vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
+int main(int argc, char** argv)
+{
+  auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-    //Creating Actor
-    vtkm::cont::ColorTable colorTable("viridis");
-    vtkm::rendering::Actor actor(ds_from_file.GetCellSet(), ds_from_file.GetCoordinateSystem(), ds_from_file.GetField("c1"), colorTable);
+  //Loading .vtk File
+  const char* input = "data/kitchen.vtk";
+  vtkm::io::reader::VTKDataSetReader reader(input);
+  vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
-    //Creating Scene and adding Actor
-    vtkm::rendering::Scene scene;
-    scene.AddActor(actor);    
+  //Creating Actor
+  vtkm::cont::ColorTable colorTable("viridis");
+  vtkm::rendering::Actor actor(ds_from_file.GetCellSet(),
+                               ds_from_file.GetCoordinateSystem(),
+                               ds_from_file.GetField("c1"),
+                               colorTable);
 
-    //Creating and initializing the View using the Canvas, Ray Tracer Mappers, and Scene
+  //Creating Scene and adding Actor
+  vtkm::rendering::Scene scene;
+  scene.AddActor(actor);
 
-    vtkm::rendering::MapperRayTracer mapper;
-    vtkm::rendering::CanvasRayTracer canvas(1920, 1080);
-    vtkm::rendering::View3D view(scene, mapper, canvas);
-    view.Initialize();
+  //Creating and initializing the View using the Canvas, Ray Tracer Mappers, and Scene
+  vtkm::rendering::MapperRayTracer mapper;
+  vtkm::rendering::CanvasRayTracer canvas(1920, 1080);
+  vtkm::rendering::View3D view(scene, mapper, canvas);
+  view.Initialize();
 
-    //Setting the background and foreground colors; optional.
+  //Setting the background and foreground colors; optional.
+  view.SetBackgroundColor(vtkm::rendering::Color(1.0f, 1.0f, 1.0f));
+  view.SetForegroundColor(vtkm::rendering::Color(0.0f, 0.0f, 0.0f));
 
-    view.SetBackgroundColor(vtkm::rendering::Color(1.0f, 1.0f, 1.0f));
-    view.SetForegroundColor(vtkm::rendering::Color(0.0f, 0.0f, 0.0f));
-      
-    //Painting View
-    view.Paint();
+  //Painting View
+  view.Paint();
 
-    //Saving View
-    view.SaveAs("BasicRendering.ppm");
+  //Saving View
+  view.SaveAs("BasicRendering.ppm");
 
-    return 0;
+  return 0;
 }

@@ -1,10 +1,13 @@
+#include <vtkm/cont/Initialize.h>
 #include <vtkm/io/reader/VTKDataSetReader.h>
 #include <vtkm/io/writer/VTKDataSetWriter.h>
 #include <vtkm/filter/Contour.h>
 
-
-int main()
+int main(int argc, char** argv)
 {
+  auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
+
   try
   {
     const char *input = "kitchen.vtk";
