@@ -210,7 +210,7 @@ inline VTKM_CONT bool ExtractEdges::DoMapField(
 
 int main()
 {
-  const char *input = "kitchen.vtk";
+  const char *input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
