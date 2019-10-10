@@ -1,16 +1,16 @@
 // Example 3: do a contour (but only evaluate two fields), write it out.
 //
 #include <vtkm/cont/Initialize.h>
+#include <vtkm/filter/Contour.h>
 #include <vtkm/io/reader/VTKDataSetReader.h>
 #include <vtkm/io/writer/VTKDataSetWriter.h>
-#include <vtkm/filter/Contour.h>
 
 int main(int argc, char** argv)
 {
   auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  const char *input = "data/kitchen.vtk";
+  const char* input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
