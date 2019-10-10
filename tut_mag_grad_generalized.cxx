@@ -18,20 +18,15 @@ namespace vtkm
 namespace worklet
 {
 
-struct Magnitude
+struct Magnitude : public vtkm::worklet::WorkletMapField
 {
-  class ComputeMagnitude : public vtkm::worklet::WorkletMapField
-  {
-  public:
-    using ControlSignature = void(FieldIn inputVectors, FieldOut outputMagnitudes);
-    using ExecutionSignature = void(_1, _2);
+  using ControlSignature = void(FieldIn inputVectors, FieldOut outputMagnitudes);
 
-    template<typename T, vtkm::IdComponent Size>
-    VTKM_EXEC void operator()(const vtkm::Vec<T, Size>& inVector, T& outMagnitude) const
-    {
-      outMagnitude = vtkm::Magnitude(inVector);
-    }
-  };
+  template<typename T, vtkm::IdComponent Size>
+  VTKM_EXEC void operator()(const vtkm::Vec<T, Size>& inVector, T& outMagnitude) const
+  {
+    outMagnitude = vtkm::Magnitude(inVector);
+  }
 };
 
 } // namespace worklet
@@ -47,42 +42,31 @@ namespace filter
 class FieldMagnitude : public vtkm::filter::FilterField<FieldMagnitude>
 {
 public:
-  using SupportedTypes = vtkm::ListTagBase<vtkm::Vec2f_32,
-                                           vtkm::Vec2f_64,
-                                           vtkm::Vec3f_32,
-                                           vtkm::Vec3f_64,
-                                           vtkm::Vec4f_32,
-                                           vtkm::Vec4f_64>;
+  using SupportedTypes = vtkm::TypeListTagVecCommon;
 
   template<typename ArrayHandleType, typename Policy>
-  VTKM_CONT vtkm::cont::DataSet DoExecute(const vtkm::cont::DataSet& inDataSet,
-                                          const ArrayHandleType& inField,
-                                          const vtkm::filter::FieldMetadata& fieldMetadata,
-                                          vtkm::filter::PolicyBase<Policy>);
-};
-
-template<typename ArrayHandleType, typename Policy>
-VTKM_CONT cont::DataSet FieldMagnitude::DoExecute(const vtkm::cont::DataSet& inDataSet,
-                                                  const ArrayHandleType& inField,
-                                                  const vtkm::filter::FieldMetadata& fieldMetadata,
-                                                  vtkm::filter::PolicyBase<Policy>)
-{
-  VTKM_IS_ARRAY_HANDLE(ArrayHandleType);
-
-  using ComponentType =
-    typename vtkm::VecTraits<typename ArrayHandleType::ValueType>::ComponentType;
-
-  vtkm::cont::ArrayHandle<ComponentType> outField;
-  this->Invoke(vtkm::worklet::Magnitude{}, inField, outField);
-
-  std::string outFieldName = this->GetOutputFieldName();
-  if (outFieldName == "")
+  VTKM_CONT cont::DataSet DoExecute(const vtkm::cont::DataSet& inDataSet,
+                                    const ArrayHandleType& inField,
+                                    const vtkm::filter::FieldMetadata& fieldMetadata,
+                                    vtkm::filter::PolicyBase<Policy>)
   {
-    outFieldName = fieldMetadata.GetName() + "_magnitude";
-  }
+    VTKM_IS_ARRAY_HANDLE(ArrayHandleType);
 
-  return vtkm::filter::CreateResult(inDataSet, outField, outFieldName, fieldMetadata);
-}
+    using ValueType = typename ArrayHandleType::ValueType;
+    using ComponentType = decltype(ValueType{}[0]); //component type of vector
+
+    vtkm::cont::ArrayHandle<ComponentType> outField;
+    this->Invoke(vtkm::worklet::Magnitude{}, inField, outField);
+
+    std::string outFieldName = this->GetOutputFieldName();
+    if (outFieldName == "")
+    {
+      outFieldName = fieldMetadata.GetName() + "_magnitude";
+    }
+
+    return vtkm::filter::CreateResult(inDataSet, outField, outFieldName, fieldMetadata);
+  }
+};
 
 } // namespace filter
 } // namespace vtkm
