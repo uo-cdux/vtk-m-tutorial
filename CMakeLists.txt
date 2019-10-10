@@ -29,3 +29,6 @@ target_link_libraries(tut_logging PUBLIC vtkm_filter)
 
 add_executable(tut_point_to_cell tut_point_to_cell.cxx)
 target_link_libraries(tut_point_to_cell PUBLIC vtkm_cont vtkm_filter)
+
+add_executable(tut_extract_edges tut_extract_edges.cxx)
+target_link_libraries(tut_extract_edges PUBLIC vtkm_cont vtkm_filter)
