@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 
   vtkm::filter::FieldMagnitude mag;
   mag.SetActiveField("Gradients");
-  vtkm::cont::DataSet mag_grad = grad.Execute(ds_from_grad);
+  vtkm::cont::DataSet mag_grad = mag.Execute(ds_from_grad);
 
   vtkm::io::writer::VTKDataSetWriter writer("out_mag_grad.vtk");
   writer.WriteDataSet(mag_grad);

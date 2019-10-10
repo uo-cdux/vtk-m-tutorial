@@ -27,9 +27,11 @@ public:
 class FieldMagnitude : public vtkm::filter::FilterField<FieldMagnitude>
 {
 public:
-  template<typename Policy>
+  using SupportedTypes = vtkm::ListTagBase<vtkm::Vec3f>;
+
+  template<typename ArrayHandleType, typename Policy>
   VTKM_CONT vtkm::cont::DataSet DoExecute(const vtkm::cont::DataSet& inDataSet,
-                                          const vtkm::cont::ArrayHandle<vtkm::Vec3f>& inField,
+                                          const ArrayHandleType& inField,
                                           const vtkm::filter::FieldMetadata& fieldMetadata,
                                           vtkm::filter::PolicyBase<Policy>)
   {
@@ -61,7 +63,7 @@ int main(int argc, char** argv)
 
   FieldMagnitude mag;
   mag.SetActiveField("Gradients");
-  vtkm::cont::DataSet mag_grad = grad.Execute(ds_from_grad);
+  vtkm::cont::DataSet mag_grad = mag.Execute(ds_from_grad);
 
   vtkm::io::writer::VTKDataSetWriter writer("out_mag_grad.vtk");
   writer.WriteDataSet(mag_grad);
