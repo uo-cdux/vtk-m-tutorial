@@ -26,3 +26,6 @@ target_link_libraries(tut_error_handling PUBLIC vtkm_filter)
 
 add_executable(tut_logging tut_logging.cxx)
 target_link_libraries(tut_logging PUBLIC vtkm_filter)
+
+add_executable(tut_point_to_cell tut_point_to_cell.cxx)
+target_link_libraries(tut_point_to_cell PUBLIC vtkm_cont vtkm_filter)
