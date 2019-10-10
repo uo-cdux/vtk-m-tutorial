@@ -1,14 +1,17 @@
 // Example 4: do a contour and a clip-with-field, and write it out.
 //
+#include <vtkm/cont/Initialize.h>
+#include <vtkm/filter/ClipWithField.h>
+#include <vtkm/filter/Contour.h>
 #include <vtkm/io/reader/VTKDataSetReader.h>
 #include <vtkm/io/writer/VTKDataSetWriter.h>
-#include <vtkm/filter/Contour.h>
-#include <vtkm/filter/ClipWithField.h>
 
-
-int main()
+int main(int argc, char** argv)
 {
-  const char *input = "kitchen.vtk";
+  auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
+
+  const char* input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
