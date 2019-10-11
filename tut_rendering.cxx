@@ -16,8 +16,7 @@ int main(int argc, char** argv)
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   //Loading .vtk File
-  const char* input = "data/kitchen.vtk";
-  vtkm::io::reader::VTKDataSetReader reader(input);
+  vtkm::io::reader::VTKDataSetReader reader("data/kitchen.vtk");
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   //Creating Actor

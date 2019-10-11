@@ -1,5 +1,6 @@
 #include <vtkm/cont/ArrayHandleGroupVec.h>
 #include <vtkm/cont/CellSetSingleType.h>
+#include <vtkm/cont/Initialize.h>
 
 #include <vtkm/exec/CellEdge.h>
 
@@ -208,10 +209,12 @@ inline VTKM_CONT bool ExtractEdges::DoMapField(
 } // namespace filter
 } // namespace vtkm
 
-int main()
+int main(int argc, char** argv)
 {
-  const char *input = "data/kitchen.vtk";
-  vtkm::io::reader::VTKDataSetReader reader(input);
+  auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
+
+  vtkm::io::reader::VTKDataSetReader reader("data/kitchen.vtk");
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   vtkm::filter::Contour contour;

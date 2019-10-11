@@ -1,4 +1,4 @@
-
+#include <vtkm/cont/Initialize.h>
 #include <vtkm/worklet/WorkletMapTopology.h>
 
 #include <vtkm/io/reader/VTKDataSetReader.h>
@@ -82,9 +82,12 @@ VTKM_CONT cont::DataSet ConvertPointFieldToCells::DoExecute(
 } // namespace vtkm
 
 
-int main()
+int main(int argc, char** argv)
 {
-  const char *input = "kitchen.vtk";
+  auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
+
+  const char *input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
