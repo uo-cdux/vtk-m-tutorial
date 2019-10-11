@@ -26,3 +26,10 @@ target_link_libraries(tut_error_handling vtkm_cont vtkm_filter)
 
 add_executable(tut_logging tut_logging.cxx)
 target_link_libraries(tut_logging vtkm_cont vtkm_filter)
+
+
+
+
+
+# Copy the data file to be adjacent to the binaries
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:tut_io>/data/" INPUT "${CMAKE_CURRENT_SOURCE_DIR}/data/kitchen.vtk")
