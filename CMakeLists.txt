@@ -32,3 +32,8 @@ target_link_libraries(tut_point_to_cell PUBLIC vtkm_cont vtkm_filter)
 
 add_executable(tut_extract_edges tut_extract_edges.cxx)
 target_link_libraries(tut_extract_edges PUBLIC vtkm_cont vtkm_filter)
+
+
+
+# Copy the data file to be adjacent to the binaries
+file(GENERATE OUTPUT "$<TARGET_FILE_DIR:tut_io>/data/" INPUT "${CMAKE_CURRENT_SOURCE_DIR}/data/kitchen.vtk")
