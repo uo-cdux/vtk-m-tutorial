@@ -1,7 +1,7 @@
 #include <vtkm/cont/Initialize.h>
+#include <vtkm/filter/Contour.h>
 #include <vtkm/io/reader/VTKDataSetReader.h>
 #include <vtkm/io/writer/VTKDataSetWriter.h>
-#include <vtkm/filter/Contour.h>
 
 int main(int argc, char** argv)
 {
@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 
   try
   {
-    const char *input = "kitchen.vtk";
+    const char* input = "kitchen.vtk";
     vtkm::io::reader::VTKDataSetReader reader(input);
 
     // PROBLEM! ... we aren't reading from a file, so we have an empty vtkm::cont::DataSet.
@@ -28,7 +28,8 @@ int main(int argc, char** argv)
     vtkm::io::writer::VTKDataSetWriter writer("out_mc.vtk");
     writer.WriteDataSet(ds_from_mc);
   }
-  catch (const vtkm::cont::Error& error) {
+  catch (const vtkm::cont::Error& error)
+  {
     std::cerr << "VTK-m error occurred!: " << error.GetMessage() << std::endl;
     return 1;
   }
