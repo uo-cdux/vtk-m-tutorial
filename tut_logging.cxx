@@ -6,13 +6,12 @@
 int main(int argc, char** argv)
 {
   auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
-  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   // SetLogLevelName must be called before Initialize
   vtkm::cont::SetLogLevelName(vtkm::cont::LogLevel::UserFirst, "tut_log");
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  vtkm::cont::Initialize(argc, argv);
-  const char* input = "kitchen.vtk";
+  const char* input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   VTKM_LOG_F(vtkm::cont::LogLevel::Info, "Reading from file %s", input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
