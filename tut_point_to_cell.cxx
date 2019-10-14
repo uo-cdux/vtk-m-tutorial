@@ -1,8 +1,9 @@
 #include <vtkm/cont/Initialize.h>
-#include <vtkm/worklet/WorkletMapTopology.h>
 
 #include <vtkm/io/reader/VTKDataSetReader.h>
 #include <vtkm/io/writer/VTKDataSetWriter.h>
+
+#include <vtkm/worklet/WorkletMapTopology.h>
 
 namespace vtkm
 {

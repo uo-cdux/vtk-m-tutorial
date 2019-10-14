@@ -10,7 +10,8 @@ int main(int argc, char** argv)
   auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  vtkm::io::reader::VTKDataSetReader reader( "data/kitchen.vtk");
+  const char *input = "data/kitchen.vtk";
+  vtkm::io::reader::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds = reader.ReadDataSet();
   vtkm::io::writer::VTKDataSetWriter writer("out_io.vtk");
   writer.WriteDataSet(ds);

@@ -6,10 +6,10 @@
 int main(int argc, char** argv)
 {
   auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
-  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   // SetLogLevelName must be called before Initialize
   vtkm::cont::SetLogLevelName(vtkm::cont::LogLevel::UserFirst, "tut_log");
+  vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   vtkm::cont::Initialize(argc, argv);
   const std::string input = "data/kitchen.vtk";

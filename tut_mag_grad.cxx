@@ -11,9 +11,8 @@
 
 #include <vtkm/worklet/WorkletMapField.h>
 
-class ComputeMagnitude : public vtkm::worklet::WorkletMapField
+struct ComputeMagnitude : vtkm::worklet::WorkletMapField
 {
-public:
   using ControlSignature = void(FieldIn inputVectors, FieldOut outputMagnitudes);
 
   VTKM_EXEC void operator()(const vtkm::Vec3f& inVector, vtkm::FloatDefault& outMagnitude) const
