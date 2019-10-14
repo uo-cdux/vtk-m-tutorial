@@ -10,8 +10,7 @@ int main(int argc, char** argv)
 
   try
   {
-    const char* input = "kitchen.vtk";
-    vtkm::io::reader::VTKDataSetReader reader(input);
+    vtkm::io::reader::VTKDataSetReader reader("data/kitchen.vtk");
 
     // PROBLEM! ... we aren't reading from a file, so we have an empty vtkm::cont::DataSet.
     //vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();

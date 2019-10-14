@@ -11,13 +11,14 @@ int main(int argc, char** argv)
   vtkm::cont::SetLogLevelName(vtkm::cont::LogLevel::UserFirst, "tut_log");
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  const char* input = "data/kitchen.vtk";
+  vtkm::cont::Initialize(argc, argv);
+  const std::string input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   VTKM_LOG_F(vtkm::cont::LogLevel::Info, "Reading from file %s", input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
   VTKM_LOG_F(vtkm::cont::LogLevel::Info, "Done reading from file %s", input);
 
-  const char* output = "out_logging.vtk";
+  const std::string output = "out_logging.vtk";
   VTKM_LOG_S(vtkm::cont::LogLevel::Info, "Writing to file" << output);
   vtkm::io::writer::VTKDataSetWriter writer(output);
   writer.WriteDataSet(ds_from_file);
