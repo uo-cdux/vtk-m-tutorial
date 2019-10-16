@@ -19,6 +19,7 @@ install_dir="${path}/install"
 if [ ! -f "${source_dir}/vtkm/CMakeLists.txt" ]; then
   echo "cloning vtkm to ${source_dir}/vtkm"
   git clone --depth=1 https://gitlab.kitware.com/vtk/vtk-m.git "${source_dir}/vtkm"
+  git checkout v1.5.0
 fi
 if [ ! -f "${source_dir}/tutorial/CMakeLists.txt" ]; then
   echo "cloning vtk-m tutorials to ${source_dir}/tutorial"
