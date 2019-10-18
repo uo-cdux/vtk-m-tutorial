@@ -5,5 +5,5 @@ Other tutorial material is avaialble on the [VTK-m wiki](http://m.vtk.org/index.
 # Organization
 The tutorial is divided into 3 sections based on what users want to accomplish with VTK-m:
 1. Using VTK-m
-2. Algoithm development with VTK-m
+2. Algorithm development with VTK-m
 3. Advanced development with VTK-m
