@@ -11,7 +11,6 @@ int main(int argc, char** argv)
   vtkm::cont::SetLogLevelName(vtkm::cont::LogLevel::UserFirst, "tut_log");
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  vtkm::cont::Initialize(argc, argv);
   const std::string input = "data/kitchen.vtk";
   vtkm::io::reader::VTKDataSetReader reader(input);
   VTKM_LOG_F(vtkm::cont::LogLevel::Info, "Reading from file %s", input);
