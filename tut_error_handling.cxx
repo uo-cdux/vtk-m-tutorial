@@ -25,13 +25,14 @@ int main(int argc, char** argv)
 
     vtkm::cont::DataSet ds_from_mc = contour.Execute(ds_from_file);
     vtkm::io::writer::VTKDataSetWriter writer("out_mc.vtk");
-    writer.WriteDataSet(ds_from_mc);
+    writer.WriteDataSet(ds_from_mc); //! Exception here
+
+    std::cerr << "FAILED TEST, Exception not raised" << std::endl;
   }
   catch (const vtkm::cont::Error& error)
   {
-    std::cerr << "VTK-m error occurred!: " << error.GetMessage() << std::endl;
-    return 1;
+    return 0;
   }
 
-  return 0;
+  return 1;
 }
