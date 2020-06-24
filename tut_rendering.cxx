@@ -16,7 +16,7 @@ int main(int argc, char** argv)
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   //Loading .vtk File
-  vtkm::io::reader::VTKDataSetReader reader("data/kitchen.vtk");
+  vtkm::io::VTKDataSetReader reader("data/kitchen.vtk");
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   //Creating Actor
@@ -34,7 +34,6 @@ int main(int argc, char** argv)
   vtkm::rendering::MapperRayTracer mapper;
   vtkm::rendering::CanvasRayTracer canvas(1920, 1080);
   vtkm::rendering::View3D view(scene, mapper, canvas);
-  view.Initialize();
 
   //Setting the background and foreground colors; optional.
   view.SetBackgroundColor(vtkm::rendering::Color(1.0f, 1.0f, 1.0f));

@@ -10,7 +10,7 @@ int main(int argc, char** argv)
   auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  vtkm::io::reader::VTKDataSetReader reader("data/kitchen.vtk");
+  vtkm::io::VTKDataSetReader reader("data/kitchen.vtk");
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   vtkm::filter::Contour contour;
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
   contour.SetIsoValue(2, 0.15);
 
   vtkm::cont::DataSet ds_from_mc = contour.Execute(ds_from_file);
-  vtkm::io::writer::VTKDataSetWriter writer("out_mc.vtk");
+  vtkm::io::VTKDataSetWriter writer("out_mc.vtk");
   writer.WriteDataSet(ds_from_mc);
 
   return 0;

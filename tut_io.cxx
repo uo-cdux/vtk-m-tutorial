@@ -11,9 +11,9 @@ int main(int argc, char** argv)
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   const char *input = "data/kitchen.vtk";
-  vtkm::io::reader::VTKDataSetReader reader(input);
+  vtkm::io::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds = reader.ReadDataSet();
-  vtkm::io::writer::VTKDataSetWriter writer("out_io.vtk");
+  vtkm::io::VTKDataSetWriter writer("out_io.vtk");
   writer.WriteDataSet(ds);
 
   return 0;

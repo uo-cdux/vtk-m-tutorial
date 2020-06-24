@@ -76,7 +76,7 @@ int main(int argc, char** argv)
   auto opts = vtkm::cont::InitializeOptions::DefaultAnyDevice;
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
-  vtkm::io::reader::VTKDataSetReader reader("data/kitchen.vtk");
+  vtkm::io::VTKDataSetReader reader("data/kitchen.vtk");
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   vtkm::filter::Gradient grad;
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
   mag.SetActiveField("Gradients");
   vtkm::cont::DataSet mag_grad = mag.Execute(ds_from_grad);
 
-  vtkm::io::writer::VTKDataSetWriter writer("out_mag_grad.vtk");
+  vtkm::io::VTKDataSetWriter writer("out_mag_grad.vtk");
   writer.WriteDataSet(mag_grad);
 
   return 0;

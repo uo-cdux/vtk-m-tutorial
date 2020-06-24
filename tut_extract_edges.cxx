@@ -29,7 +29,9 @@ struct CountEdgesWorklet : vtkm::worklet::WorkletVisitCellsWithPoints
     CellShapeTag cellShape,
     vtkm::IdComponent numPointsInCell) const
   {
-    return vtkm::exec::CellEdgeNumberOfEdges(numPointsInCell, cellShape, *this);
+    vtkm::IdComponent numEdges;
+    vtkm::exec::CellEdgeNumberOfEdges(numPointsInCell, cellShape, numEdges);
+    return numEdges;
   }
 };
 
@@ -52,8 +54,8 @@ struct EdgeIdsWorklet : vtkm::worklet::WorkletVisitCellsWithPoints
     vtkm::IdComponent numPointsInCell =
       globalPointIndicesForCell.GetNumberOfComponents();
 
-    canonicalIdOut = vtkm::exec::CellEdgeCanonicalId(
-      numPointsInCell, localEdgeIndex, cellShape, globalPointIndicesForCell, *this);
+    vtkm::exec::CellEdgeCanonicalId(
+      numPointsInCell, localEdgeIndex, cellShape, globalPointIndicesForCell, canonicalIdOut);
   }
 };
 
@@ -83,10 +85,12 @@ struct EdgeIndicesWorklet : vtkm::worklet::WorkletReduceByKey
     vtkm::IdComponent edgeIndex = originEdges[0];
     auto cellShape = cellSet.GetCellShape(originCells[0]);
 
-    vtkm::IdComponent pointInCellIndex0 = vtkm::exec::CellEdgeLocalIndex(
-      numPointsInCell, 0, edgeIndex, cellShape, *this);
-    vtkm::IdComponent pointInCellIndex1 = vtkm::exec::CellEdgeLocalIndex(
-      numPointsInCell, 1, edgeIndex, cellShape, *this);
+    vtkm::IdComponent pointInCellIndex0;
+    vtkm::exec::CellEdgeLocalIndex(
+          numPointsInCell, 0, edgeIndex, cellShape, pointInCellIndex0);
+    vtkm::IdComponent pointInCellIndex1;
+    vtkm::exec::CellEdgeLocalIndex(
+          numPointsInCell, 1, edgeIndex, cellShape, pointInCellIndex1);
 
     auto globalPointIndicesForCell = cellSet.GetIndices(originCells[0]);
     connectivityOut[0] = globalPointIndicesForCell[pointInCellIndex0];
@@ -125,8 +129,7 @@ inline VTKM_CONT vtkm::cont::DataSet ExtractEdges::DoExecute(
   const vtkm::cont::DataSet& inData,
   vtkm::filter::PolicyBase<Policy> policy)
 {
-  const vtkm::cont::DynamicCellSet& inCellSet =
-    vtkm::filter::ApplyPolicyCellSet(inData.GetCellSet(), policy);
+  auto inCellSet = vtkm::filter::ApplyPolicyCellSet(inData.GetCellSet(), policy, *this);
 
   // First, count the edges in each cell.
   vtkm::cont::ArrayHandle<vtkm::IdComponent> edgeCounts;
@@ -215,7 +218,7 @@ int main(int argc, char** argv)
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   const char *input = "data/kitchen.vtk";
-  vtkm::io::reader::VTKDataSetReader reader(input);
+  vtkm::io::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   vtkm::filter::Contour contour;
@@ -226,7 +229,7 @@ int main(int argc, char** argv)
   vtkm::filter::ExtractEdges extractEdges;
   vtkm::cont::DataSet wireframe = extractEdges.Execute(ds_from_contour);
 
-  vtkm::io::writer::VTKDataSetWriter writer("out_wireframe.vtk");
+  vtkm::io::VTKDataSetWriter writer("out_wireframe.vtk");
   writer.WriteDataSet(wireframe);
 
   return 0;

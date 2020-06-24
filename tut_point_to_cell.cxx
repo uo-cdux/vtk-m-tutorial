@@ -66,7 +66,7 @@ VTKM_CONT cont::DataSet ConvertPointFieldToCells::DoExecute(
 
   vtkm::cont::ArrayHandle<ValueType> outField;
   this->Invoke(vtkm::worklet::ConvertPointFieldToCells{},
-               vtkm::filter::ApplyPolicyCellSet(inDataSet.GetCellSet(), policy),
+               vtkm::filter::ApplyPolicyCellSet(inDataSet.GetCellSet(), policy, *this),
                inField,
                outField);
 
@@ -89,14 +89,14 @@ int main(int argc, char** argv)
   vtkm::cont::InitializeResult config = vtkm::cont::Initialize(argc, argv, opts);
 
   const char *input = "data/kitchen.vtk";
-  vtkm::io::reader::VTKDataSetReader reader(input);
+  vtkm::io::VTKDataSetReader reader(input);
   vtkm::cont::DataSet ds_from_file = reader.ReadDataSet();
 
   vtkm::filter::ConvertPointFieldToCells pointToCell;
   pointToCell.SetActiveField("c1");
   vtkm::cont::DataSet ds_from_convert = pointToCell.Execute(ds_from_file);
 
-  vtkm::io::writer::VTKDataSetWriter writer("out_point_to_cell.vtk");
+  vtkm::io::VTKDataSetWriter writer("out_point_to_cell.vtk");
   writer.WriteDataSet(ds_from_convert);
 
   return 0;
